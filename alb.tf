@@ -8,37 +8,19 @@ resource "aws_lb_target_group" "tg" {
     healthy_threshold   = 2
     unhealthy_threshold = 2
     interval            = 5
-    path                = "/health"
+    path                = "/"
     port                = var.APP_PORT
     timeout             = 3
   }
 }
 
 resource "aws_lb_listener" "lb-listener" {
-  count             = var.LB_PUBLIC ? 1 : 0
-  load_balancer_arn = data.terraform_remote_state.alb.outputs.PUBLIC_LB_ARN
+  load_balancer_arn = var.LB_PUBLIC ? data.terraform_remote_state.alb.outputs.PUBLIC_LB_ARN : data.terraform_remote_state.alb.outputs.PRIVATE_LB_ARN
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.tg.arn
-  }
-}
-
-resource "aws_lb_listener_rule" "static" {
-  count        = var.LB_PRIVATE ? 1 : 0
-  listener_arn = data.terraform_remote_state.alb.outputs.PRIVATE_LISTENER_ARN
-  priority     = var.LB_RULE_PRIORITY
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.tg.arn
-  }
-
-  condition {
-    host_header {
-      values = ["${var.COMPONENT}-${var.ENV}.chaitu.org"]
-    }
   }
 }
