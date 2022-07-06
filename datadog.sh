@@ -4,7 +4,7 @@ if [ -f /etc/nginx/conf.d/nodejs.conf ]; then
   set-hostname -skip-apply frontend-dev
 fi
 
-if [ -d /home/roboshop ]; then
+if [ -d /home/node ]; then
     set-hostname -skip-apply spec-dev
 fi
 
