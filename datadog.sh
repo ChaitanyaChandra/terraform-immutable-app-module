@@ -7,7 +7,7 @@ if [ -f /etc/nginx/conf.d/nodejs.conf ]; then
 fi
 
 if [ -d /home/node ]; then
-    set-hostname -skip-apply spec-dev
+    set-hostname  spec-dev # -skip-apply
       sudo systemctl enable spec
       sudo systemctl start spec
 fi
