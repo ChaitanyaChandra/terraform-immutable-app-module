@@ -1,5 +1,5 @@
 resource "aws_route53_record" "private-record" {
-  count   = var.LB_TYPE == "public" ? 1 : 0
+  count   = var.LB_TYPE == "public" ? 0 : 1
   zone_id = data.terraform_remote_state.vpc.outputs.PRIVATE_HOSTED_ZONE_ID
   name    = "${var.COMPONENT}-${var.ENV}.chaitu.org"
   type    = "CNAME"
